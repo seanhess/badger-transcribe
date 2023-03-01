@@ -1,8 +1,10 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
+import os
 
 app = FastAPI()
+DEEPGRAM_API_KEY = os.getenv('DEEPGRAM_API_KEY')
 
 @app.get("/", response_class=HTMLResponse)
 async def root():
@@ -21,10 +23,14 @@ async def root():
     </html>
     """
 
+
 @app.post("/files/")
 async def create_file(file: UploadFile):
   print(file.filename)
-  return {"file_size": file.filename}
+
+  # Sweet! We have file contents
+  contents = await file.read()
+  return {"file_size": file.filename, "contents": contents}
 
 @app.get("/test")
 async def test():
