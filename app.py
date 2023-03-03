@@ -19,10 +19,9 @@ def upload() -> dict:
 
   try:
     result = transcribe_upload(upload)
-    return {"result": result}
+    return {"transcript": result.get('transcript')}
   except InvalidFiletype: 
     return {"error": "InvalidFiletype", "ext": ext}
-  
 
   
 

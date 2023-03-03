@@ -1,0 +1,28 @@
+.bg-red { background: red }
+.bg-light { background: ghostwhite }
+.hover:bg-light:hover { background: ghostwhite }
+.bg-white { background: white }
+.rnd { border-radius: 5px; }
+.bx { border: none }
+.b1 { border: solid 1px }
+.b-black { border-color: black }
+.b-gray { border-color: gray }
+.dx { display: none }
+.btn { cursor: pointer }
+
+.r { display: flex; flex-direction: row }
+.c { display: flex; flex-direction: column }
+
+.p1 { padding: 1px }
+.p2 { padding: 2px }
+.p3 { padding: 3px }
+.p4 { padding: 4px }
+.p5 { padding: 5px }
+.p10 { padding: 10px }
+
+.g1 { gap: 1px }
+.g2 { gap: 2px }
+.g3 { gap: 3px }
+.g4 { gap: 4px }
+.g5 { gap: 5px }
+.g10 { gap: 10px }
