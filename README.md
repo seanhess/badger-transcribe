@@ -25,6 +25,23 @@ https://bottlepy.org/docs/dev/tutorial.html#file-uploads
 
 
 
+## Deploy to Digital Ocean
+
+Generate an access token, then
+
+    > brew install doctl
+    > doctl registry login
+
+Build Docker Image
+
+    > docker build --platform linux/amd64 -t registry.digitalocean.com/badger/transcribe:latest .
+
+Deploy
+
+    > docker tag my-image:latest registry.digitalocean.com/badger/transcribe:latest
+    > docker push registry.digitalocean.com/badger/transcribe:latest
+
+
 ## Deepgram Response
 
 

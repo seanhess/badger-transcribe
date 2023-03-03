@@ -1,4 +1,4 @@
-from bottle import route, post, get, run, template, static_file, request, FileUpload
+from bottle import route, post, get, run, template, static_file, request, FileUpload, default_app
 from tempfile import NamedTemporaryFile
 from typing import BinaryIO, TypedDict, Optional, Match, Union
 from transcribe import transcribe_upload, InvalidFiletype
@@ -49,10 +49,7 @@ async def test():
 def server_static(filename):
     return static_file(filename, root='/path/to/your/static/files')
 
+# if __name__ == "__main__":
+#     run(reloader=True)
 
-
-
-if __name__ == "__main__":
-    run(reloader=True)
-
-
+app = default_app()
