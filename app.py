@@ -9,22 +9,7 @@ import os
 
 @route("/")
 def root():
-    return """
-    <html>
-        <head>
-          <title>Some HTML in here</title>
-        </head>
-        <body>
-          <h1>Look ma! HTML!</h1>
-          <form method="POST" action="/upload" enctype="multipart/form-data">
-            Name:  <input type="text" name="name">
-            Job:  <input type="text" name="job">
-            File:  <input type="file" name="upload">
-            <input type="submit" value="Start Upload">
-          </form>
-        </body>
-    </html>
-    """
+  return static_file("app.html", root='./static')
 
 
 @post("/upload")
@@ -47,7 +32,7 @@ async def test():
 
 @route('/static/<filename>')
 def server_static(filename):
-    return static_file(filename, root='/path/to/your/static/files')
+    return static_file(filename, root='./static')
 
 # if __name__ == "__main__":
 #     run(reloader=True)
