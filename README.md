@@ -15,3 +15,10 @@ Save requirements to the file
 Install from saved requirements
 
   > pip install -r requirements.txt
+
+
+
+
+# Bottle
+
+https://bottlepy.org/docs/dev/tutorial.html#file-uploads
