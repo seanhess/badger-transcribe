@@ -1,16 +1,24 @@
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import { Layout, Main, Sidebar } from './comp/Layout'
 import './app.css'; //added line
+import UploadBox from './view/Content';
 
 function Counter() {
   const [count, setCount] = useState(0);
   return (
-    <>
-      <h1 className="text-primary text-4xl font-bold test">{count}</h1>
-      <button onClick={() => setCount(count + 1)} className="bg-red-500 hover:bg-slate-700 focus:outline-none">
-        Increment
-      </button>
-    </>
+    <Layout>
+      <Main>
+        <div className="p-4 gap-4 flex flex-col">
+          <h1 className="font-bold">Badger Audio Transcription</h1>
+          <p className="italic">Easily transcibe your audio and video files</p>
+          <UploadBox/>
+        </div>
+      </Main>
+      <Sidebar>
+        SIDEBAR
+      </Sidebar>
+    </Layout>
   );
 }
 
