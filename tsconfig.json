@@ -3,6 +3,7 @@
     "outDir": "./static/",
     "noImplicitAny": true,
     "module": "es6",
+    "jsx": "react-jsx",
     "target": "es5",
     "allowJs": true,
     "moduleResolution": "node"
