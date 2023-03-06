@@ -2,22 +2,50 @@ import { ReactNode, useState, FC } from "react";
 import TargetBox from "../comp/TargetBox"
 import * as Style from "../comp/Style"
 import * as Icons from "../comp/Icons"
+import { uploadAndTranscribe, Result } from "../transcribe"
 
+interface Props {
+  onTranscript: (t:string) => void;
+}
 
-// It's only the uploadbox if it doesn't have a file yet!
-export const Content = () => {
+export const Content:FC<Props> = ({onTranscript}) => {
 
-  // we have decided to do some stuff!
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isLoading, setLoading] = useState<Boolean>(false)
+  const [error, setError] = useState<string | null>(null)
+
+  // report the results of the transcription
+  async function runTranscribe(file:File) {
+    setLoading(true)
+    try {
+      let res = await uploadAndTranscribe(file)
+      onTranscript(res.transcript)
+    }
+    catch (e) {
+      setError(e.toString())
+    }
+  }
 
   let step;
 
-  if (selectedFile) {
+  if (error) {
+    step =
+      <div className="text-red-500">
+        <div className="font-bold">Error:</div>
+        <div>{error}</div>
+      </div>
+  }
+
+  else if (isLoading) {
+    step = <Icons.Spinner fill={"#727CF5"} size={128}/>
+  }
+
+  else if (selectedFile) {
     step =
       <Transcribe
         file={selectedFile}
         onRemove={() => setSelectedFile(null)}
-        onTranscribe={(f) => transcribe(f)}
+        onTranscribe={runTranscribe}
       />
 
   } else {
@@ -29,8 +57,9 @@ export const Content = () => {
   )
 }
 
-function transcribe(file:File) {
-  alert("TRANSCRIBE:" + file.name)
+async function runTranscribe(file:File):Promise<Result> {
+  let result = await uploadAndTranscribe(file)
+  return result
 }
 
 interface UploadProps {
