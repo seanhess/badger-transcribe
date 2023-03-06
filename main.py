@@ -1,7 +1,7 @@
 from bottle import route, post, get, run, template, static_file, request, FileUpload, default_app
 from tempfile import NamedTemporaryFile
 from typing import BinaryIO, TypedDict, Optional, Match, Union
-from transcribe import transcribe_upload, InvalidFiletype
+from app.transcribe import transcribe_upload, InvalidFiletype
 import shutil
 import os
 
@@ -26,14 +26,19 @@ def upload() -> dict:
   
 
 @get("/test")
-async def test():
-    return {"message": "TEST!"}
+def test():
+    return {"message": "TESTx"}
 
 @route('/static/<filename>')
 def server_static(filename):
     return static_file(filename, root='./static')
 
-# if __name__ == "__main__":
-#     run(reloader=True)
-
 app = default_app()
+
+if __name__ == "__main__":
+  print("RUNNING RELOADER")
+  run(reloader=True)
+
+
+
+

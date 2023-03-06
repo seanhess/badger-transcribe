@@ -28,7 +28,6 @@ class InvalidFiletype(Exception):
   """Raised when upload is an invalid file type / extension"""
 
 
-
 def upload_source(upload:FileUpload) -> AudioSource:
   name, ext = os.path.splitext(upload.filename)
   ft = filetype(ext)
@@ -70,3 +69,5 @@ def mimetype(ft:Filetype) -> str:
     case Filetype.WAV:  return "audio/wav"
     case Filetype.FLAC: return "audio/flac"
     case Filetype.M4A:  return "audio/mp4"
+
+

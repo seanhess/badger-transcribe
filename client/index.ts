@@ -1,6 +1,6 @@
 import { Server } from "http";
 
-console.log("WOOOTer")
+console.log("WOOOTer1")
 
 document.addEventListener("submit", function(event) {
   event.preventDefault();
@@ -15,11 +15,14 @@ function upload(fileInput:HTMLInputElement) {
 
   // TODO: required that a file is present
   let file = fileInput.files[0]
+  console.log("FILE", file, file.name)
 
   if (!file) {
     console.error("No File Specified")
     return
   }
+
+  return
 
   formData.append("upload", file)
 
