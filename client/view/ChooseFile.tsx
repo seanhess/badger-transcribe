@@ -19,7 +19,11 @@ export const ChooseFile:FC<Props> = ({onFile}) => {
         <label className={Style.button}>
           <Icons.Upload/>
           Choose Audio File
-          <input type="file" className="invisible w-0 h-0" name="upload" onChange={(e) => onFile(e.target.files[0])}/>
+          <input type="file" name="upload" 
+            accept={FORMATS.map((f) => "." + f).join(',')}
+            className="invisible w-0 h-0"
+            onChange={(e) => onFile(e.target.files[0])}
+            />
         </label>
         <p>Max File Size 1GB</p>
       </Content>
@@ -31,4 +35,8 @@ export const ChooseFile:FC<Props> = ({onFile}) => {
 }
 
 export default ChooseFile
+
+
+let FORMATS =
+  ["mp2", "mp3", "mp4", "aac", "wav", "flac", "m4a", "mpeg"]
 
