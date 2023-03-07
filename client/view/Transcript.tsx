@@ -1,4 +1,6 @@
 import { ReactNode, FC } from "react";
+import { Content, Sidebar } from "../comp/Layout"
+import TargetBox from "../comp/TargetBox";
 
 interface Props {
   transcript: string
@@ -7,8 +9,13 @@ interface Props {
 export const Transcript:FC<Props> = ({transcript}) => {
   return (
     <>
-      <h1 className="font-bold">Transcript</h1>
-      <p>{transcript}</p>
+      <Content>
+        <TargetBox>
+          <h1 className="font-bold">Transcript</h1>
+          <p>{transcript}</p>
+        </TargetBox>
+      </Content>
+
     </>
   )
 }
