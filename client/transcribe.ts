@@ -1,12 +1,14 @@
 import axios, {isCancel, AxiosError, AxiosResponse, AxiosProgressEvent} from 'axios';
 
-export async function uploadAndTranscribe(file:File, onProgress:(e:AxiosProgressEvent) => void):Promise<Result> {
+export async function uploadAndTranscribe(file:File, onProgress:(e:number) => void):Promise<Result> {
   console.log("UPLOAD", file, file.name)
   const formData = new FormData()
   formData.append("upload", file)
 
   // TODO handle serverside error (HTML return format)
-  const res:AxiosResponse<Result> = await axios.postForm("/upload", formData, { onUploadProgress: onProgress })
+  const res:AxiosResponse<Result> = await axios.postForm("/upload", formData,
+    { onUploadProgress: ({progress}) => onProgress(progress) }
+  )
   // const data = await res.json();
   return handleResults(res.data)
 }

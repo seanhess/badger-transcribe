@@ -28,11 +28,11 @@ export const Upload:FC<Props> = ({onTranscript, onRemoveFile, selectedFile}) => 
       let exp = expectedSeconds(selectedFile) * 1000
       let dur = Date.now() - uploaded
       let prog = Math.min(1, dur / exp)
-      console.log("TIMER", (prog*100) + '%')
+      // console.log("TIMER", (prog*100) + '%')
       // setTotalProgress(currentProgress())
       setTranscribeProgress(prog)
     }
-  }, 1000);
+  }, 100);
 
   // report the results of the transcription
   async function runTranscribe(file:File) {
@@ -47,8 +47,8 @@ export const Upload:FC<Props> = ({onTranscript, onRemoveFile, selectedFile}) => 
     }
   }
 
-  function onUploadProgress({loaded, total, progress}:AxiosProgressEvent) {
-    console.log("PROGRESS", progress)
+  function onUploadProgress(progress:number) {
+    // console.log("PROGRESS", progress)
     setUploadProgress(progress)
     if (progress >= 1) {
       console.log("UPLOADED")
@@ -125,7 +125,7 @@ export const Loading = ({uploadProgress = 0, transcribeProgress = 0}) => {
     <>
       <div className="mb-1 text-lg font-medium">Uploading...</div>
       <div className="w-full h-4 mb-4 bg-gray rounded-full">
-        <div className="h-4 bg-primary rounded-full animate-pulse transition-width ease-out delay-200" style={{"width": pcent + '%'}}></div>
+        <div className="h-4 bg-primary rounded-full animate-pulse transition-width linear duration-100" style={{"width": pcent + '%'}}></div>
       </div>
     </>
   )
