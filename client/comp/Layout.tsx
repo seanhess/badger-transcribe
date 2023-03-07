@@ -44,7 +44,7 @@ export const Content:FC<Parent> =({children}) =>{
 export const Sidebar:FC<Parent> =({children}) =>{
   return(
     <>
-      <div className="grow flex flex-col sm:max-w-md">
+      <div className="flex flex-col w-72">
         <Panel>
           {children}
         </Panel>

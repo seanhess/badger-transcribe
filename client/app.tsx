@@ -5,8 +5,6 @@ import './app.css'; //added line
 import ChooseFile from './view/ChooseFile';
 import Transcript from './view/Transcript';
 import Upload from './view/Upload';
-import { uploadAndTranscribe, Result } from "./transcribe"
-import TargetBox from './comp/TargetBox';
 
 console.log("loaded")
 
@@ -26,6 +24,7 @@ function App() {
         selectedFile={selectedFile}
         onRemoveFile={() => setSelectedFile(null)}
         onTranscript={(t) => setTranscript(t)}
+        // onTranscript={() => null}
       />
   }
   else {

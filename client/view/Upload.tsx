@@ -1,9 +1,11 @@
-import { ReactNode, useState, FC } from "react";
+import { ReactNode, useState, useEffect, FC } from "react";
 import TargetBox from "../comp/TargetBox"
 import * as Style from "../comp/Style"
 import * as Icons from "../comp/Icons"
 import { Content, Sidebar } from "../comp/Layout"
-import { uploadAndTranscribe, Result } from "../transcribe"
+import { uploadAndTranscribe, expectedSeconds, Result } from "../transcribe"
+import { AxiosProgressEvent } from "axios";
+import { useInterval } from 'usehooks-ts'
 
 interface Props {
   selectedFile: File
@@ -13,18 +15,44 @@ interface Props {
 
 export const Upload:FC<Props> = ({onTranscript, onRemoveFile, selectedFile}) => {
 
-  const [isLoading, setLoading] = useState<Boolean>(false)
+  const [loading, setLoading] = useState<number>(null)
+  const [uploaded, setUploaded] = useState<number>(null)
   const [error, setError] = useState<string | null>(null)
+  const [uploadProgress, setUploadProgress] = useState<number>(0)
+  const [transcribeProgress, setTranscribeProgress] = useState<number>(0)
+
+
+  useInterval(() => {
+    // console.log("TIMER", uploadProgress, expectedSeconds(selectedFile))
+    if (uploadProgress >= 1) {
+      let exp = expectedSeconds(selectedFile) * 1000
+      let dur = Date.now() - uploaded
+      let prog = Math.min(1, dur / exp)
+      console.log("TIMER", (prog*100) + '%')
+      // setTotalProgress(currentProgress())
+      setTranscribeProgress(prog)
+    }
+  }, 1000);
 
   // report the results of the transcription
   async function runTranscribe(file:File) {
-    setLoading(true)
+    setLoading(Date.now())
     try {
-      let res = await uploadAndTranscribe(file)
+      let res = await uploadAndTranscribe(file, onUploadProgress)
+      setTranscribeProgress(1)
       onTranscript(res.transcript)
     }
     catch (e) {
       setError(e.toString())
+    }
+  }
+
+  function onUploadProgress({loaded, total, progress}:AxiosProgressEvent) {
+    console.log("PROGRESS", progress)
+    setUploadProgress(progress)
+    if (progress >= 1) {
+      console.log("UPLOADED")
+      setUploaded(Date.now())
     }
   }
 
@@ -38,8 +66,8 @@ export const Upload:FC<Props> = ({onTranscript, onRemoveFile, selectedFile}) => 
       </div>
   }
 
-  else if (isLoading) {
-    step = <Icons.Spinner fill={"#727CF5"} size={128}/>
+  else if (loading) {
+    step = <Loading uploadProgress={uploadProgress} transcribeProgress={transcribeProgress}/>
   }
 
   else {
@@ -55,7 +83,7 @@ export const Upload:FC<Props> = ({onTranscript, onRemoveFile, selectedFile}) => 
   return (
     <>
       <Content>
-        <TargetBox>{step}</TargetBox>
+        {step}
       </Content>
       <Sidebar>sidebar</Sidebar>
     </>
@@ -83,6 +111,22 @@ export const Transcribe:FC<TranscribeProps> = ({onTranscribe, onRemove, file}) =
         <span>Transcribe Audio</span>
         <Icons.Right/>
       </button>
+    </>
+  )
+}
+
+
+// no, we need to give it multiple stages
+export const Loading = ({uploadProgress = 0, transcribeProgress = 0}) => {
+  let totalProgress = uploadProgress/2 + transcribeProgress/2
+  let pcent = Math.ceil(totalProgress * 100)
+  console.log("Loading", "upload=", uploadProgress, "trascript=", transcribeProgress, "pcent=", pcent)
+  return (
+    <>
+      <div className="mb-1 text-lg font-medium">Uploading...</div>
+      <div className="w-full h-4 mb-4 bg-gray rounded-full">
+        <div className="h-4 bg-primary rounded-full animate-pulse transition-width ease-out delay-200" style={{"width": pcent + '%'}}></div>
+      </div>
     </>
   )
 }

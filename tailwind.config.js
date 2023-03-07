@@ -7,10 +7,13 @@ module.exports = {
   theme: {
     extend: {
         colors: {
-            "primary-dark": '#727CF5',
+            "primary-dark": '#1867bd',
             "primary": '#1e83ec',
             "gray-light": '#efeef3',
-            gray: '#BEC0DA',
+            "gray": '#BEC0DA',
+        },
+        transitionProperty: {
+          'width': 'width'
         },
     },
   },
