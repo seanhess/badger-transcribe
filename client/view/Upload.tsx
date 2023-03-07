@@ -121,9 +121,15 @@ export const Loading = ({uploadProgress = 0, transcribeProgress = 0}) => {
   let totalProgress = uploadProgress/2 + transcribeProgress/2
   let pcent = Math.ceil(totalProgress * 100)
   console.log("Loading", "upload=", uploadProgress, "trascript=", transcribeProgress, "pcent=", pcent)
+
+  let message = "Uploading File..."
+  if (transcribeProgress > 0) {
+    message = "Transcribing..."
+  }
+
   return (
     <>
-      <div className="mb-1 text-lg font-medium">Uploading...</div>
+      <div className="mb-1 text-lg font-medium">{message}</div>
       <div className="w-full h-4 mb-4 bg-gray rounded-full">
         <div className="h-4 bg-primary rounded-full animate-pulse transition-width linear duration-100" style={{"width": pcent + '%'}}></div>
       </div>
