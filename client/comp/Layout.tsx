@@ -9,9 +9,17 @@ export const Layout:FC<Parent> =({children}) =>{
   return(
     <>
       <div className="min-h-screen flex flex-col bg-primary">
-        <div className="h-20 p-1 pt-2 px-8 bg-white"><Logo/></div>
-        <div className="flex flex-row justify-center">
-          <div className="max-w-4xl grow sm:flex flex-row">
+
+        <div className="h-20 p-1 pt-2 px-8 bg-white flex flex-row items-center">
+          <div className="w-48"><Logo/></div>
+          <div className="grow flex flex-row justify-center">
+            <h1 className="font-bold text-4xl">Transcribe Audio</h1>
+          </div>
+          <div className="grow md:max-w-48">&nbsp;</div>
+        </div>
+
+        <div className="flex flex-row justify-center p-4">
+          <div className="max-w-4xl grow sm:flex flex-row gap-4">
             {children}
           </div>
         </div>
@@ -24,7 +32,7 @@ export const Layout:FC<Parent> =({children}) =>{
 export const Content:FC<Parent> =({children}) =>{
   return(
     <>
-      <div className="grow flex flex-col p-4 gap-4">
+      <div className="grow flex flex-col">
         <Panel>
           {children}
         </Panel>
@@ -36,8 +44,10 @@ export const Content:FC<Parent> =({children}) =>{
 export const Sidebar:FC<Parent> =({children}) =>{
   return(
     <>
-      <div className="grow sm:max-w-md">
-        {children}
+      <div className="grow flex flex-col sm:max-w-md">
+        <Panel>
+          {children}
+        </Panel>
       </div>
     </>
   )

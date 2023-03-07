@@ -13,7 +13,6 @@ export const ChooseFile:FC<Props> = ({onFile}) => {
   return (
     <>
       <Content>
-        <h1 className="font-bold">Badger Audio Transcription</h1>
         <p className="italic">Easily transcibe your audio and video files</p>
 
         <label className={Style.button}>
@@ -25,10 +24,10 @@ export const ChooseFile:FC<Props> = ({onFile}) => {
             onChange={(e) => onFile(e.target.files[0])}
             />
         </label>
-        <p>Max File Size 1GB</p>
+        {/* <p>Max File Size 1GB</p> */}
       </Content>
       <Sidebar>
-        Upload Sidebar
+        ChooseFile Sidebar
       </Sidebar>
     </>
   )
