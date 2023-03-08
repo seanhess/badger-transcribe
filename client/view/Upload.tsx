@@ -3,9 +3,11 @@ import TargetBox from "../comp/TargetBox"
 import * as Style from "../comp/Style"
 import * as Icons from "../comp/Icons"
 import { Content, Sidebar } from "../comp/Layout"
-import { uploadAndTranscribe, expectedSeconds, Result } from "../transcribe"
+import { uploadAndTranscribe, expectedSeconds, TranscribeOptions } from "../transcribe"
 import { AxiosProgressEvent } from "axios";
 import { useInterval } from 'usehooks-ts'
+import FAQ from "../comp/FAQ"
+import Switch from "../comp/Switch"
 
 interface Props {
   selectedFile: File
@@ -35,10 +37,10 @@ export const Upload:FC<Props> = ({onTranscript, onRemoveFile, selectedFile}) => 
   }, 100);
 
   // report the results of the transcription
-  async function runTranscribe(file:File) {
+  async function runTranscribe(file:File, options:TranscribeOptions) {
     setLoading(Date.now())
     try {
-      let res = await uploadAndTranscribe(file, onUploadProgress)
+      let res = await uploadAndTranscribe(file, options, onUploadProgress)
       setTranscribeProgress(1)
       onTranscript(res.transcript)
     }
@@ -85,19 +87,32 @@ export const Upload:FC<Props> = ({onTranscript, onRemoveFile, selectedFile}) => 
       <Content>
         {step}
       </Content>
-      <Sidebar>sidebar</Sidebar>
+      <Sidebar>
+        <FAQ/>
+      </Sidebar>
     </>
   )
 }
 
 
 interface TranscribeProps {
-  onTranscribe: (file: File) => void;
+  onTranscribe: (file: File, options: TranscribeOptions) => void;
   onRemove: () => void;
   file: File;
 }
 
 export const Transcribe:FC<TranscribeProps> = ({onTranscribe, onRemove, file}) =>  {
+
+  const [punctuate, setPunctuate] = useState<boolean>(true)
+  const [numerals, setNumerals] = useState<boolean>(true)
+
+  function options():TranscribeOptions {
+    return {
+      punctuate: punctuate,
+      numerals: numerals
+    }
+  }
+
   return (
     <>
       <div className="flex flex-row-wrapped gap-1">
@@ -107,7 +122,15 @@ export const Transcribe:FC<TranscribeProps> = ({onTranscribe, onRemove, file}) =
         <div className="grow">{file.name}</div>
         <div>{formatBytes(file.size)}</div>
       </div>
-      <button className={Style.button + "justify-center"} onClick={() => onTranscribe(file)}>
+      <div className="flex flex-col">
+        <Switch checked={punctuate} onChange={setPunctuate} label="Punctuate"/>
+        <div className="italic">Adds punctuation and capitalization</div>
+      </div>
+      <div className="flex flex-col">
+        <Switch checked={numerals} onChange={setNumerals} label="Numerals"/>
+        <div className="italic">Converts numbers from written format to numerical format</div>
+      </div>
+      <button className={Style.button + "justify-center"} onClick={() => onTranscribe(file, options())}>
         <span>Transcribe Audio</span>
         <Icons.Right/>
       </button>
@@ -130,6 +153,7 @@ export const Loading = ({uploadProgress = 0, transcribeProgress = 0}) => {
   return (
     <>
       <div className="mb-1 text-lg font-medium">{message}</div>
+      <div className="italic">Please do not refresh or close this window.</div>
       <div className="w-full h-4 mb-4 bg-gray rounded-full">
         <div className="h-4 bg-primary rounded-full animate-pulse transition-width linear duration-100" style={{"width": pcent + '%'}}></div>
       </div>

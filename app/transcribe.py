@@ -10,11 +10,31 @@ import os
 DEEPGRAM_API_KEY = os.getenv('DEEPGRAM_API_KEY')
 deepgram = Deepgram(DEEPGRAM_API_KEY)
 
+class Options():
+  punctuate: bool
+  numerals: bool
 
-def transcribe_upload(upload: FileUpload) -> Alternative:
+# https://developers.deepgram.com/documentation/features/
+def transcribe_upload(upload: FileUpload, options: Options) -> Alternative:
   audio = upload_source(upload)
-  response = deepgram.transcription.sync_prerecorded(audio, {'punctuate': True})
-  print(json.dumps(response, indent=4))
+  response = deepgram.transcription.sync_prerecorded(audio,
+              { 'alternatives': 1, # only return 1 option. They can give more!
+
+                # These are valid options
+                'punctuate': str(options.punctuate),
+                'numerals': str(options.numerals),
+
+                # can't tell if these are working
+                # these are word-level features.
+                # 'diarize': 'true',
+                # 'utterances': 'true',
+
+                # can't find timestamps
+              }
+            )
+
+  print("SENT", "punctuate:", options.punctuate, "numerals:", options.numerals)
+  # print(json.dumps(response, indent=4))
   return response.get("results").get("channels")[0].get("alternatives")[0]
 
 

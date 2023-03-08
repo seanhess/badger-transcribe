@@ -1,9 +1,16 @@
 import axios, {isCancel, AxiosError, AxiosResponse, AxiosProgressEvent} from 'axios';
 
-export async function uploadAndTranscribe(file:File, onProgress:(e:number) => void):Promise<Result> {
+export type TranscribeOptions = {
+  punctuate: boolean
+  numerals: boolean
+}
+
+export async function uploadAndTranscribe(file:File, options:TranscribeOptions, onProgress:(e:number) => void):Promise<Result> {
   console.log("UPLOAD", file, file.name)
   const formData = new FormData()
   formData.append("upload", file)
+  formData.append("punctuate", JSON.stringify(options.punctuate))
+  formData.append("numerals", JSON.stringify(options.punctuate))
 
   // TODO handle serverside error (HTML return format)
   const res:AxiosResponse<Result> = await axios.postForm("/upload", formData,

@@ -1,11 +1,3 @@
-# FastAPI Server
-
-Run the app with auto-reload
-
-  > uvicorn main:app --reload
-
-
-
 ## Python / PIP Notes
 
 Save requirements to the file
@@ -23,9 +15,16 @@ Install from saved requirements
 
 https://bottlepy.org/docs/dev/tutorial.html#file-uploads
 
+Run Dev
+
+    > python3 main.py
+
+Build Client
+
+    > npx webpack -w
 
 
-## Deploy to Digital Ocean
+## Deploy to Digital Ocean (No longer in use)
 
 Generate an access token, then
 
