@@ -5,6 +5,8 @@ from app.transcribe import transcribe_upload, InvalidFiletype, Options
 import shutil
 import os
 import stripe
+from math import ceil
+
 
 stripe.api_key = 'sk_test_HMIOpn5GnEGaPj5gnn0KZ0MX'
 
@@ -12,7 +14,7 @@ DOMAIN = os.environ['APP_ENDPOINT']
 print("Domain:", DOMAIN)
 
 # The price-id for our $1 product
-PRICE_1USD = "price_0Mlv7hSgRLsuDnmGC5IJ9rTW"
+# PRICE_1USD = "price_0Mlv7hSgRLsuDnmGC5IJ9rTW"
 
 
 @route("/")
@@ -36,32 +38,47 @@ def upload() -> dict:
 
 @post("/checkout")
 def checkout():
-    try:
-      checkout_session = stripe.checkout.Session.create(
-          line_items=[
-              {
-                # # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                # Oh, these could be minutes!
-                'price': PRICE_1USD,
-                'quantity': 1,
-                # 'product_data': {
-                #   'name': 'Transcription'
-                # },
-                # 'price_data': {
-                #   'currency':'usd',
-                #   'unit_amount':4000
-                # },
-                # 'quantity': 1,
-              },
-          ],
-          mode='payment',
-          success_url=DOMAIN + '/payment/success',
-          cancel_url=DOMAIN + '/payment/canceled',
-      )
-    except Exception as e:
-      return str(e)
+  # price = int(request.forms.get('price'))
+  name = request.forms.get('name')
+  size = int(request.forms.get('size'))
 
-    return redirect(checkout_session.url, code=303)
+  UNIT_PRICE = 100
+  UNIT_SIZE = 1000*1000
+  units = ceil(size / UNIT_SIZE)
+
+  print("CHECKOUT:", name, size, units)
+
+
+  try:
+    checkout_session = stripe.checkout.Session.create(
+        line_items=[
+          {
+            # # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+            # Oh, these could be minutes!
+            # 'price': PRICE_1USD,
+            'description': "Audio Transcription",
+            'name': "Transcribe: " + name,
+            'currency': "usd",
+            'amount': UNIT_PRICE,
+            'quantity': units,
+            # 'product_data': {
+            #   'name': 'Woot'
+            # },
+            # 'price_data': {
+            #   'currency':'usd',
+            #   'unit_amount':4000
+            # },
+            # 'quantity': 1,
+          },
+        ],
+        mode='payment',
+        success_url=DOMAIN + '/payment/success',
+        cancel_url=DOMAIN + '/payment/canceled',
+    )
+  except Exception as e:
+    return str(e)
+
+  return redirect(checkout_session.url, code=303)
 
 
 @get("/payment/success")

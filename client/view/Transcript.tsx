@@ -54,6 +54,7 @@ export const Transcript:FC<Props> = ({transcript, file, cancel}) => {
         <form action="/checkout" method="POST" className="m-0 flex flex-col">
           <input type="hidden" value={file.name} name="name"/>
           <input type="hidden" value={file.size} name="size"/>
+          <input type="hidden" value={totalUsd} name="price"/>
           <button type="submit" className={Style.button + "uppercase"}>Checkout</button>
         </form>
       </Sidebar>
