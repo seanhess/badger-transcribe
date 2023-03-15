@@ -1,15 +1,15 @@
 ## TODO Major
 
 - [ ] Limit files to 1GB. What should the timeout be??
-- [ ] Integrate Stripe Checkout
-- [ ] Hint
-- [ ] Download file
+- [x] Integrate Stripe Checkout
+- [x] Hint
+- [x] Download file
 
 ## TODO Minor / Cleanup
 
-- [ ] Back button
+- [x] Back button
 - [ ] Real FAQ and copy
-- [ ] Better progress bar, it's not quite long enough? Don't give the upload as much space
+- [x] Better progress bar, it's not quite long enough? Don't give the upload as much space
 - [?] Handle Axios Errors. What should we do?
 
 ## TODO Eventually
