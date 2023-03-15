@@ -4,12 +4,12 @@ export type USD = number
 
 export function totalCost(file:FileInfo):USD {
   let mb = fileSizeMb(file)
-  let units = Math.ceil(mb / 10)
-  let cost = units * 1
+  let units = mb / UNIT
+  let cost = Math.ceil(units * PRICE_PER_UNIT)
   return Math.max(1, cost)
 }
 
-const UNIT:Mb = 10
+const UNIT:Mb = 1
 type Units = number
 
 export const PRICE_PER_UNIT:USD = 1
@@ -20,6 +20,6 @@ export function unitPrice():string {
 
 export function totalUnits(file:FileInfo):Units {
   let mb:Mb = fileSizeMb(file)
-  let units = Math.ceil(mb / 10)
+  let units = mb / 10
   return units
 }

@@ -18,14 +18,15 @@ export function fileInfo(file:File):FileInfo {
 }
 
 export function fileSizeMb(file:FileInfo):Mb {
-  return file.size / 1000000
+  return file.size / (1000 * 1000)
 }
 
 
 export function formatBytes(bytes:Bytes, decimals = 2) {
   if (!+bytes) return '0 Bytes'
 
-  const k = 1024
+  // this was 1024, but that's not true!
+  const k = 1000
   const dm = decimals < 0 ? 0 : decimals
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
 

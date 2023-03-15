@@ -143,8 +143,8 @@ export const Transcribe:FC<TranscribeProps> = ({onTranscribe, onRemove, file}) =
 // no, we need to give it multiple stages
 export const Loading = ({uploadProgress = 0, transcribeProgress = 0}) => {
   let totalProgress = uploadProgress * 0.3 + transcribeProgress * 0.7
-  let pcent = Math.ceil(totalProgress * 100)
-  console.log("Loading", "upload=", uploadProgress, "trascript=", Math.round(transcribeProgress * 100), "pcent=", pcent)
+  let pcent = (totalProgress * 100).toFixed(2)
+  console.log("Loading", "upload=", uploadProgress, "transcript=", (transcribeProgress * 100).toFixed(2), "pcent=", pcent)
 
   function message():string {
     if (transcribeProgress <= 0) {

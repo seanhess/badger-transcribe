@@ -15,7 +15,9 @@
 ## TODO Eventually
 
 - [ ] Use a function worker for transcription and app platform for the API
-- [ ] Real storage / permanance. Upload to cloud storage first, then transcribe. Give them a URL or something.
+- [x] Real storage / permanance. Upload to cloud storage first, then transcribe. Give them a URL or something.
+- [ ] pydub to preview only the first minute of audio (chatGPT knows)
+
 
 
 ## Python / PIP Notes
