@@ -1,4 +1,5 @@
 import axios, {isCancel, AxiosError, AxiosResponse, AxiosProgressEvent} from 'axios';
+import { fileSizeMb } from './file';
 
 export type TranscribeOptions = {
   punctuate: boolean
@@ -43,24 +44,7 @@ export function expectedSeconds(file:File):number {
   return Math.max(durSeconds, 5)
 }
 
-export function fileSizeMb(file:File):Mb {
-  return file.size / 1000000
-}
 
-
-type Mb = number
-
-export type FileInfo = {
-  size: Mb
-  name: string
-}
-
-export function fileInfo(file:File):FileInfo {
-  return {
-    size: fileSizeMb(file),
-    name: file.name
-  }
-}
 
 export type Result = { transcript: string }
 type ServerError = { error: string }

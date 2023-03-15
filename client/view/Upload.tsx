@@ -1,8 +1,8 @@
 import { ReactNode, useState, useEffect, FC } from "react";
-import TargetBox from "../comp/TargetBox"
 import * as Style from "../comp/Style"
 import * as Icons from "../comp/Icons"
 import { Content, Sidebar } from "../comp/Layout"
+import { FileRow } from "../comp/FileRow"
 import { uploadAndTranscribe, expectedSeconds, TranscribeOptions } from "../transcribe"
 import { AxiosProgressEvent } from "axios";
 import { useInterval } from 'usehooks-ts'
@@ -117,13 +117,8 @@ export const Transcribe:FC<TranscribeProps> = ({onTranscribe, onRemove, file}) =
 
   return (
     <>
-      <div className="flex flex-row-wrapped gap-1">
-        <button onClick={() => onRemove()}>
-          <Icons.XCircle/>
-        </button>
-        <div className="grow">{file.name}</div>
-        <div>{formatBytes(file.size)}</div>
-      </div>
+      <h2 className="font-bold text-xl">Selected File</h2>
+      <FileRow file={file} onRemove={onRemove}/>
       <div className="flex flex-col">
         <Switch checked={punctuate} onChange={setPunctuate} label="Punctuate"/>
         <div className="italic">Adds punctuation and capitalization</div>
@@ -141,11 +136,15 @@ export const Transcribe:FC<TranscribeProps> = ({onTranscribe, onRemove, file}) =
 }
 
 
+
+
+
+
 // no, we need to give it multiple stages
 export const Loading = ({uploadProgress = 0, transcribeProgress = 0}) => {
   let totalProgress = uploadProgress * 0.3 + transcribeProgress * 0.7
   let pcent = Math.ceil(totalProgress * 100)
-  console.log("Loading", "upload=", uploadProgress, "trascript=", transcribeProgress, "pcent=", pcent)
+  console.log("Loading", "upload=", uploadProgress, "trascript=", Math.round(transcribeProgress * 100), "pcent=", pcent)
 
   function message():string {
     if (transcribeProgress <= 0) {
@@ -168,17 +167,3 @@ export const Loading = ({uploadProgress = 0, transcribeProgress = 0}) => {
 
 export default Upload
 
-
-
-
-function formatBytes(bytes:number, decimals = 2) {
-  if (!+bytes) return '0 Bytes'
-
-  const k = 1024
-  const dm = decimals < 0 ? 0 : decimals
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
-
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
-}

@@ -5,7 +5,7 @@ import './app.css'; //added line
 import ChooseFile from './view/ChooseFile';
 import Transcript from './view/Transcript';
 import Upload from './view/Upload';
-import { fileInfo } from './transcribe';
+import { fileInfo } from './file';
 
 console.log("loaded")
 
@@ -28,6 +28,7 @@ function App() {
 
   function onFile(file:File) {
     localStorage.setItem('file', JSON.stringify(fileInfo(file)))
+    setSavedFileInfo(file)
     setSelectedFile(file)
   }
 
@@ -35,8 +36,8 @@ function App() {
     localStorage.removeItem('transcript')
     localStorage.removeItem('file')
     setTranscript(null)
-    setSelectedFile(null)
     setSavedFileInfo(null)
+    setSelectedFile(null)
   }
 
   useEffect(() => {
@@ -46,7 +47,7 @@ function App() {
 
     let file:FileInfo = JSON.parse(localStorage.getItem('file'))
     setSavedFileInfo(file)
-  })
+  }, [])
 
 
   let content;

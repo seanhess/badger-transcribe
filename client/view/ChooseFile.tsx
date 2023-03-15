@@ -3,6 +3,7 @@ import * as Style from "../comp/Style"
 import * as Icons from "../comp/Icons"
 import { Content, Sidebar } from "../comp/Layout"
 import FAQ from "../comp/FAQ"
+import { unitPrice } from "../checkout";
 
 interface Props {
   onFile(file:File):void;
@@ -14,7 +15,7 @@ export const ChooseFile:FC<Props> = ({onFile}) => {
   return (
     <>
       <Content>
-        <p className="italic">Easily transcibe your audio and video files. Only $1 for 30 minutes! (Or whatever)</p>
+        <p>Easily transcibe your audio and video files. Only {unitPrice()}</p>
 
         <label className={Style.button}>
           <Icons.Upload/>
