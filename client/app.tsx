@@ -5,6 +5,7 @@ import './app.css'; //added line
 import ChooseFile from './view/ChooseFile';
 import Transcript from './view/Transcript';
 import Upload from './view/Upload';
+import Download from './view/Download';
 import { fileInfo } from './file';
 
 console.log("loaded")
@@ -20,6 +21,7 @@ function App() {
   const [transcript, setTranscript] = useState<string | null>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [savedFileInfo, setSavedFileInfo] = useState<FileInfo | null>(null)
+  const [paid, setPaid] = useState(false)
 
   function createTranscript(t:string) {
     localStorage.setItem('transcript', t)
@@ -38,7 +40,9 @@ function App() {
     setTranscript(null)
     setSavedFileInfo(null)
     setSelectedFile(null)
+    window.location.pathname = "/"
   }
+
 
   useEffect(() => {
     let transcript = localStorage.getItem('transcript')
@@ -50,9 +54,13 @@ function App() {
   }, [])
 
 
+  let path = window.location.pathname
   let content;
 
-  if (transcript) {
+  if (path == '/payment/success' && savedFileInfo) {
+    content = <Download transcript={transcript} file={savedFileInfo} startOver={cancelTranscript}/>
+  }
+  else if (transcript) {
     content = <Transcript transcript={transcript} file={savedFileInfo} cancel={cancelTranscript}/>
   }
   else if (selectedFile) {

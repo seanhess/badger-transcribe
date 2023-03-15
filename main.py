@@ -48,27 +48,15 @@ def checkout():
 
   print("CHECKOUT:", name, size, units)
 
-
   try:
     checkout_session = stripe.checkout.Session.create(
         line_items=[
           {
-            # # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-            # Oh, these could be minutes!
-            # 'price': PRICE_1USD,
             'description': "Audio Transcription",
             'name': "Transcribe: " + name,
             'currency': "usd",
             'amount': UNIT_PRICE,
             'quantity': units,
-            # 'product_data': {
-            #   'name': 'Woot'
-            # },
-            # 'price_data': {
-            #   'currency':'usd',
-            #   'unit_amount':4000
-            # },
-            # 'quantity': 1,
           },
         ],
         mode='payment',
@@ -83,11 +71,11 @@ def checkout():
 
 @get("/payment/success")
 def payment():
-  return "Payment Succeeded"
+  return static_file("app.html", root='./static')
 
 @get("/payment/canceled")
 def payment_canceled():
-  return "Payment Canceled"
+  return static_file("app.html", root='./static')
   
 
 
