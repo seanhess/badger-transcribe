@@ -2,6 +2,8 @@
 
 - [ ] Limit files to 1GB. What should the timeout be??
 - [ ] Integrate Stripe Checkout
+- [ ] Hint
+- [ ] Download file
 
 ## TODO Minor / Cleanup
 
