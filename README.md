@@ -1,3 +1,21 @@
+## TODO Major
+
+- [ ] Limit files to 1GB. What should the timeout be??
+- [ ] Integrate Stripe Checkout
+
+## TODO Minor / Cleanup
+
+- [ ] Back button
+- [ ] Real FAQ and copy
+- [ ] Better progress bar, it's not quite long enough? Don't give the upload as much space
+- [?] Handle Axios Errors. What should we do?
+
+## TODO Eventually
+
+- [ ] Use a function worker for transcription and app platform for the API
+- [ ] Real storage / permanance. Upload to cloud storage first, then transcribe. Give them a URL or something.
+
+
 ## Python / PIP Notes
 
 Save requirements to the file

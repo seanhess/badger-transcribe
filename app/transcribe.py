@@ -33,7 +33,7 @@ def transcribe_upload(upload: FileUpload, options: Options) -> Alternative:
               }
             )
 
-  print("SENT", "punctuate:", options.punctuate, "numerals:", options.numerals)
+  # print("SENT", "punctuate:", options.punctuate, "numerals:", options.numerals)
   # print(json.dumps(response, indent=4))
   return response.get("results").get("channels")[0].get("alternatives")[0]
 

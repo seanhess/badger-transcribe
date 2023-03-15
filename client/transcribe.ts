@@ -29,14 +29,19 @@ function handleResults(data:Result | ServerError):Result {
 }
 
 export function expectedSeconds(file:File):number {
+  let mb = file.size / 1000000
+
   // Deepgram says 30 seconds for 1h of audio
-  // 1h of mp3 is ~100mb
-  // 30 seconds for every 100 mb
+  // - 1h of mp3 is ~100mb
+  // - 30 seconds for every 100 mb
+
+  // But actual tests give:
+  // - 35.9 mb just took 132s
+  // - 150s / 40 mb = 3.75
+  let secondsPerMb = 3.75
 
   // expect a minimum of 5s
-
-  let mb = file.size / 1000000
-  let durSeconds = (mb / 100) * 30
+  let durSeconds = mb * secondsPerMb
   return Math.max(durSeconds, 5)
 }
 

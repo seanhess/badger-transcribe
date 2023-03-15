@@ -25,16 +25,18 @@ export const Upload:FC<Props> = ({onTranscript, onRemoveFile, selectedFile}) => 
 
 
   useInterval(() => {
-    // console.log("TIMER", uploadProgress, expectedSeconds(selectedFile))
     if (uploadProgress >= 1) {
-      let exp = expectedSeconds(selectedFile) * 1000
-      let dur = Date.now() - uploaded
-      let prog = Math.min(1, dur / exp)
-      // console.log("TIMER", (prog*100) + '%')
-      // setTotalProgress(currentProgress())
+      let prog = currentTranscribeProgress()
       setTranscribeProgress(prog)
     }
   }, 100);
+
+  function currentTranscribeProgress(): number {
+    let exp = expectedSeconds(selectedFile) * 1000
+    let dur = Date.now() - uploaded
+    let prog = Math.min(1, dur / exp)
+    return prog
+  }
 
   // report the results of the transcription
   async function runTranscribe(file:File, options:TranscribeOptions) {
@@ -141,18 +143,21 @@ export const Transcribe:FC<TranscribeProps> = ({onTranscribe, onRemove, file}) =
 
 // no, we need to give it multiple stages
 export const Loading = ({uploadProgress = 0, transcribeProgress = 0}) => {
-  let totalProgress = uploadProgress/2 + transcribeProgress/2
+  let totalProgress = uploadProgress * 0.3 + transcribeProgress * 0.7
   let pcent = Math.ceil(totalProgress * 100)
   console.log("Loading", "upload=", uploadProgress, "trascript=", transcribeProgress, "pcent=", pcent)
 
-  let message = "Uploading File..."
-  if (transcribeProgress > 0) {
-    message = "Transcribing..."
+  function message():string {
+    if (transcribeProgress <= 0) {
+      return "Uploading File..."
+    } else {
+      return "Transcribing..."
+    }
   }
 
   return (
     <>
-      <div className="mb-1 text-lg font-medium">{message}</div>
+      <div className="mb-1 text-lg font-medium">{message()}</div>
       <div className="italic">Please do not refresh or close this window.</div>
       <div className="w-full h-4 mb-4 bg-gray rounded-full">
         <div className="h-4 bg-primary rounded-full animate-pulse transition-width linear duration-100" style={{"width": pcent + '%'}}></div>
