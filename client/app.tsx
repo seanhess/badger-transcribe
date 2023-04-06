@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Layout, Content, Sidebar } from './comp/Layout'
 import './app.css'; //added line
-import ChooseFile from './view/ChooseFile';
+import ChooseFile, {fileError} from './view/ChooseFile';
 import Transcript from './view/Transcript';
 import Upload from './view/Upload';
 import Download from './view/Download';
@@ -15,6 +15,9 @@ type FileInfo = {
   size: Mb
   name: string
 }
+
+
+
 
 function App() {
 
@@ -44,6 +47,7 @@ function App() {
   }
 
 
+
   useEffect(() => {
     let transcript = localStorage.getItem('transcript')
     console.log("local transcript:", transcript != null)
@@ -53,6 +57,7 @@ function App() {
     setSavedFileInfo(file)
   }, [])
 
+  console.log("FILE", selectedFile, fileError(selectedFile))
 
   let path = window.location.pathname
   let content;
@@ -63,7 +68,7 @@ function App() {
   else if (transcript) {
     content = <Transcript transcript={transcript} file={savedFileInfo} cancel={cancelTranscript}/>
   }
-  else if (selectedFile) {
+  else if (selectedFile && fileError(selectedFile) === undefined) {
     content =
       <Upload
         selectedFile={selectedFile}
@@ -73,7 +78,7 @@ function App() {
       />
   }
   else {
-    content = <ChooseFile onFile={onFile}/>
+    content = <ChooseFile onFile={onFile} fileError={fileError(selectedFile)}/>
   }
 
   return (

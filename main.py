@@ -1,4 +1,4 @@
-from bottle import route, post, get, run, redirect, template, static_file, request, FileUpload, default_app
+from bottle import route, post, get, run, redirect, template, static_file, request, FileUpload, default_app, HTTPResponse
 from tempfile import NamedTemporaryFile
 from typing import BinaryIO, TypedDict, Optional, Match, Union
 from app.transcribe import transcribe_upload, InvalidFiletype, Options
@@ -23,8 +23,14 @@ def root():
 
 
 @post("/upload")
-def upload() -> dict:
+def upload():
   upload:FileUpload = request.files.get('upload')
+
+  size = int(request.headers["Content-Length"])
+  print("SIZE", size)
+  if (size > 10*1000000):
+    return HTTPResponse(status=413, body={"error": "FileTooLarge", "size": size})
+
   options = Options()
   options.punctuate = request.forms.get('punctuate')
   options.numerals = request.forms.get('numerals')
@@ -34,7 +40,7 @@ def upload() -> dict:
     result = transcribe_upload(upload, options)
     return {"transcript": result.get('transcript')}
   except InvalidFiletype: 
-    return {"error": "InvalidFiletype", "ext": ext}
+    return HTTPResponse(status=400, body={"error": "InvalidFiletype", "ext": ext})
 
 @post("/checkout")
 def checkout():
