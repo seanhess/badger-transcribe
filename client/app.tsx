@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { Layout, Content, Sidebar } from './comp/Layout'
 import './app.css'; //added line
 import ChooseFile, {fileError} from './view/ChooseFile';
-import Transcribed from './view/Transcript';
+import Transcribed from './view/Transcribed';
 import Upload from './view/Upload';
 import Download from './view/Download';
 import { fileInfo } from './data/file';
@@ -28,6 +28,8 @@ function App() {
   
 
   function createTranscript(t:string) {
+
+    // If they are in trail mode, go straight to download
     transcriptHistory.add({transcript: t, file: fileInfo(selectedFile)})
     setTranscript(t)
   }

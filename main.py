@@ -24,6 +24,10 @@ MAX_SIZE_MB = 100
 def root():
   return static_file("app.html", root='./static')
 
+@route("/try")
+def trial():
+  return static_file("app.html", root='./static')
+
 
 @post("/upload")
 def upload():
