@@ -41,7 +41,15 @@ export const ChooseFile:FC<Props> = ({onFile, fileError}) => {
             onChange={(e) => onFile(e.target.files[0])}
             />
         </label>
-        <p>Audio Only. Max File Size 100mb</p>
+        <p className="text-sm">Audio Only. Max File Size 100mb.</p>
+        <p className="text-sm">
+          <a className="underline cursor-pointer text-blue-500"
+             href="https://www.freeconvert.com/convert/video-to-mp3"
+             target="_blank">
+              Try this free tool
+          </a>
+          <span> to convert your video files to MP3.</span>
+          </p>
         <Errors error={fileError}/>
       </Content>
       <Sidebar>

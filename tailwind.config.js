@@ -11,6 +11,7 @@ module.exports = {
             "primary": '#1e83ec',
             "gray-light": '#efeef3',
             "gray": '#BEC0DA',
+            "gray-dark": '#666',
         },
         transitionProperty: {
           'width': 'width'

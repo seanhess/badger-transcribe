@@ -24,18 +24,26 @@ export const Download:FC<Props> = ({transcript, file, startOver}) => {
     startOver()
   }
 
+  function copyTranscript() {
+    navigator.clipboard.writeText(transcript)
+      .then(() => alert("Copied Transcript to Clipboard"))
+  }
+
   // Split paragraphs
   let paragraphs = transcript.trim().split(/\n+/g)
 
   return (
     <>
       <Content>
-        <h1 className="font-bold text-2xl">Transcript</h1>
+        <h1 className="font-bold text-2xl">Purchase Successful</h1>
+        <p>Click the button below to download your transcript</p>
         <FileRow file={file} onRemove={remove} />
-        <div className="flex flex-row">
+        <div className="flex flex-row gap-2">
           <button className={Style.button} onClick={download}>Download Full Transcript</button>
+          <button className={Style.button2} onClick={remove}>Start Over</button>
         </div>
-        <div className="bg-gray-light p-10 border-dashed border-4 border-gray gap-4 flex flex-col">
+        <div className="bg-gray-light p-10 border-dashed border-4 border-gray gap-4 flex flex-col relative">
+          <button onClick={copyTranscript} className="cursor-pointer absolute right-2 top-2 text-gray-dark"><Icons.Copy/></button>
           { paragraphs.map((p) => <p>{p}</p>) }
         </div>
       </Content>

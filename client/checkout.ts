@@ -9,7 +9,7 @@ export function totalCost(file:FileInfo):USD {
   return Math.max(1, cost)
 }
 
-const UNIT:Mb = 1
+const UNIT:Mb = 10
 type Units = number
 
 export const PRICE_PER_UNIT:USD = 1

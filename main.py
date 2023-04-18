@@ -13,6 +13,9 @@ stripe.api_key = 'sk_test_HMIOpn5GnEGaPj5gnn0KZ0MX'
 DOMAIN = os.environ['APP_ENDPOINT']
 print("Domain:", DOMAIN)
 
+
+MAX_SIZE_MB = 100
+
 # The price-id for our $1 product
 # PRICE_1USD = "price_0Mlv7hSgRLsuDnmGC5IJ9rTW"
 
@@ -28,7 +31,7 @@ def upload():
 
   size = int(request.headers["Content-Length"])
   print("SIZE", size)
-  if (size > 10*1000000):
+  if (size > MAX_SIZE_MB*1000000):
     return HTTPResponse(status=413, body={"error": "FileTooLarge", "size": size})
 
   features = Features()
@@ -49,11 +52,11 @@ def checkout():
   name = request.forms.get('name')
   size = int(request.forms.get('size'))
 
-  UNIT_PRICE = 100
-  UNIT_SIZE = 1000*1000
+  UNIT_PRICE = 1
+  UNIT_SIZE = 10*1000000
   units = ceil(size / UNIT_SIZE)
 
-  print("CHECKOUT:", name, size, units)
+  print("CHECKOUT:", name, size, "amount:", UNIT_PRICE, "quantity:", units)
 
   try:
     checkout_session = stripe.checkout.Session.create(
@@ -62,7 +65,7 @@ def checkout():
             'description': "Audio Transcription",
             'name': "Transcribe: " + name,
             'currency': "usd",
-            'amount': UNIT_PRICE,
+            'amount': UNIT_PRICE*100,
             'quantity': units,
           },
         ],
