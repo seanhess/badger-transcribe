@@ -74,7 +74,7 @@ export const Logo = () => {
 
 export const Panel:FC<Parent> = ({children, className = ""}) => {
   return (
-    <div className="bg-white rounded-lg drop-shadow-xl p-6 gap-4 flex flex-col">
+    <div className={className + " bg-white rounded-lg drop-shadow-xl p-6 gap-4 flex flex-col"}>
       {children}
     </div>
   )

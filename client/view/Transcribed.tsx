@@ -26,7 +26,7 @@ export const Transcribed:FC<Props> = ({transcript, file, cancel}) => {
 
         <div className="relative h-48">
           <div className="bg-gray-light p-10 border-dashed border-4 border-gray gap-4 flex flex-col absolute h-48 w-full overflow-hidden">
-            {hint.map((p) => <p>{p}</p>)}
+            {hint.map((p, i) => <p key={i}>{p}</p>)}
           </div>
           <div className="absolute h-48 w-full bg-gradient-to-t from-white text-right p-1 pr-2 text-sm uppercase text-gray">
             Transcription Preview

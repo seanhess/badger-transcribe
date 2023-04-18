@@ -25,6 +25,7 @@ function App() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [savedFileInfo, setSavedFileInfo] = useState<FileInfo | null>(null)
   const [purchases, setPurchases] = useState<Transcript[]>([])
+  const [isPurchased, setIsPurchased] = useState<boolean>(false);
   
 
   function createTranscript(t:string) {
@@ -32,10 +33,15 @@ function App() {
     // If they are in trail mode, go straight to download
     transcriptHistory.add({transcript: t, file: fileInfo(selectedFile)})
     setTranscript(t)
+
+    if (window.location.pathname == '/try' && transcriptHistory.allPurchases()?.length == 0) {
+      console.log("GO FREE TRIAL!")
+      setIsPurchased(true)
+    }
   }
 
   function onFile(file:File) {
-    setSavedFileInfo(file)
+    setSavedFileInfo(fileInfo(file))
     setSelectedFile(file)
   }
 
@@ -44,7 +50,9 @@ function App() {
     setTranscript(null)
     setSavedFileInfo(null)
     setSelectedFile(null)
-    window.location.pathname = "/"
+    window.history.replaceState({}, "", "/")
+    setIsPurchased(false)
+    setPurchases(transcriptHistory.allPurchases())
   }
 
   function purchased(t:Transcript) {
@@ -60,13 +68,16 @@ function App() {
     let trans = transcriptHistory.transcript()
     setTranscript(trans?.transcript)
     setSavedFileInfo(trans?.file)
+    console.log("LOAD", trans?.file)
     setPurchases(transcriptHistory.allPurchases())
+
+    console.log("CHECKING PURCHASED")
+    setIsPurchased(window.location.pathname == '/payment/success')
   }, [])
 
-  let path = window.location.pathname
   let content;
 
-  if (path == '/payment/success' && savedFileInfo) {
+  if (isPurchased && savedFileInfo) {
     content = <Download transcript={transcript} file={savedFileInfo} startOver={cancelTranscript} purchased={purchased}/>
   }
   else if (transcript) {

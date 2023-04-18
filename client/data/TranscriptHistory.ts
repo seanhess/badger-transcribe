@@ -7,8 +7,6 @@ export type Transcript = {
 
 export class TranscriptHistory {
 
-
-
   transcript():Transcript {
     return JSON.parse(localStorage.getItem('transcript'))
   }
@@ -22,13 +20,14 @@ export class TranscriptHistory {
   }
 
   purchased(transcript:Transcript) {
+    console.log("PURCHASED", transcript.file)
     let purchases = this.purchases()
     purchases[transcript.file.name] = transcript
     localStorage.setItem('purchases', JSON.stringify(purchases))
   }
 
   purchases():{[file:string]:Transcript} {
-    return JSON.parse(localStorage.getItem('purchases'))
+    return JSON.parse(localStorage.getItem('purchases')) || {}
   }
 
   allPurchases():Transcript[] {

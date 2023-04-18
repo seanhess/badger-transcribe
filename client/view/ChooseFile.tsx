@@ -12,7 +12,7 @@ export enum FileError {
   TooBig
 }
 
-export const MAX_FILE_SIZE = 10*1000000
+export const MAX_FILE_SIZE = 100*1000000
 
 
 export function fileError(file:File | undefined) {
@@ -31,6 +31,8 @@ interface Props {
 
 export const ChooseFile:FC<Props> = ({onFile, fileError, purchases, loadPurchase}) => {
   // const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  console.log("PURCHASES", purchases)
 
   return (
     <>
@@ -58,7 +60,7 @@ export const ChooseFile:FC<Props> = ({onFile, fileError, purchases, loadPurchase
             </p>
           <Errors error={fileError}/>
         </Panel>
-        <Panel>
+        <Panel className={purchases.length > 0 ? '' : 'hidden'}>
           <div>Purchased Transcripts</div>
           {purchases.map((t) => <Purchase key={t.file.name} load={loadPurchase} transcript={t}/>)}
         </Panel>
