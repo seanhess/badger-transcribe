@@ -19,7 +19,7 @@ export const Layout:FC<Parent> =({children}) =>{
         </div>
 
         <div className="flex flex-row justify-center p-4">
-          <div className="max-w-4xl grow sm:flex flex-row gap-4">
+          <div className="max-w-4xl grow flex flex-col sm:flex-row gap-4">
             {children}
           </div>
         </div>
