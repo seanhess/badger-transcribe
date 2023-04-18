@@ -1,7 +1,7 @@
 import { ReactNode, FC, useEffect } from "react";
 import { Content, Sidebar } from "../comp/Layout"
 import { FileRow } from "../comp/FileRow"
-import { FileInfo } from "../file";
+import { FileInfo } from "../data/file";
 import * as Style from "../comp/Style"
 import { totalCost, unitPrice } from "../checkout";
 
@@ -13,7 +13,7 @@ interface Props {
   cancel():void
 }
 
-export const Transcript:FC<Props> = ({transcript, file, cancel}) => {
+export const Transcribed:FC<Props> = ({transcript, file, cancel}) => {
 
   let totalUsd = totalCost(file)
   let hint = transcript.trim().substring(0, 1000).split(/\n+/)
@@ -70,5 +70,5 @@ const Currency:FC<{amount:number, className?:string}> = ({amount, className = ""
 }
 
 
-export default Transcript;
+export default Transcribed;
 

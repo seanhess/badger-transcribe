@@ -1,4 +1,4 @@
-import { FileInfo, fileSizeMb, Mb, Bytes, formatBytes } from "./file";
+import { FileInfo, fileSizeMb, Mb, Bytes, formatBytes } from "./data/file";
 
 export type USD = number
 

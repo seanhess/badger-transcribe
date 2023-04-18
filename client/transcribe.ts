@@ -1,5 +1,5 @@
 import axios, {isCancel, AxiosError, AxiosResponse, AxiosProgressEvent} from 'axios';
-import { fileSizeMb } from './file';
+import { fileSizeMb } from './data/file';
 
 export type TranscribeOptions = {
   punctuate: boolean

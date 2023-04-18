@@ -32,10 +32,20 @@ export const Layout:FC<Parent> =({children}) =>{
 export const Content:FC<Parent> =({children}) =>{
   return(
     <>
-      <div className="grow flex flex-col">
+      <Contents>
         <Panel>
           {children}
         </Panel>
+      </Contents>
+    </>
+  )
+}
+
+export const Contents:FC<Parent> =({children}) =>{
+  return(
+    <>
+      <div className="grow flex flex-col gap-4">
+        {children}
       </div>
     </>
   )

@@ -3,10 +3,11 @@ import { createRoot } from 'react-dom/client';
 import { Layout, Content, Sidebar } from './comp/Layout'
 import './app.css'; //added line
 import ChooseFile, {fileError} from './view/ChooseFile';
-import Transcript from './view/Transcript';
+import Transcribed from './view/Transcript';
 import Upload from './view/Upload';
 import Download from './view/Download';
-import { fileInfo } from './file';
+import { fileInfo } from './data/file';
+import { TranscriptHistory, Transcript } from "./data/TranscriptHistory"
 
 console.log("loaded")
 
@@ -16,57 +17,58 @@ type FileInfo = {
   name: string
 }
 
-
-
+const transcriptHistory = new TranscriptHistory()
 
 function App() {
 
   const [transcript, setTranscript] = useState<string | null>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [savedFileInfo, setSavedFileInfo] = useState<FileInfo | null>(null)
-  const [paid, setPaid] = useState(false)
+  const [purchases, setPurchases] = useState<Transcript[]>([])
+  
 
   function createTranscript(t:string) {
-    localStorage.setItem('transcript', t)
+    transcriptHistory.add({transcript: t, file: fileInfo(selectedFile)})
     setTranscript(t)
   }
 
   function onFile(file:File) {
-    localStorage.setItem('file', JSON.stringify(fileInfo(file)))
     setSavedFileInfo(file)
     setSelectedFile(file)
   }
 
   function cancelTranscript() {
-    localStorage.removeItem('transcript')
-    localStorage.removeItem('file')
+    transcriptHistory.remove()
     setTranscript(null)
     setSavedFileInfo(null)
     setSelectedFile(null)
     window.location.pathname = "/"
   }
 
+  function purchased(t:Transcript) {
+    transcriptHistory.purchased(t)
+  }
 
+  function loadPurchase(t:Transcript) {
+    transcriptHistory.add(t)
+    window.location.pathname = '/payment/success'
+  }
 
   useEffect(() => {
-    let transcript = localStorage.getItem('transcript')
-    console.log("local transcript:", transcript != null)
-    setTranscript(transcript)
-
-    let file:FileInfo = JSON.parse(localStorage.getItem('file'))
-    setSavedFileInfo(file)
+    let trans = transcriptHistory.transcript()
+    setTranscript(trans?.transcript)
+    setSavedFileInfo(trans?.file)
+    setPurchases(transcriptHistory.allPurchases())
   }, [])
-
-  console.log("FILE", selectedFile, fileError(selectedFile))
 
   let path = window.location.pathname
   let content;
 
   if (path == '/payment/success' && savedFileInfo) {
-    content = <Download transcript={transcript} file={savedFileInfo} startOver={cancelTranscript}/>
+    content = <Download transcript={transcript} file={savedFileInfo} startOver={cancelTranscript} purchased={purchased}/>
   }
   else if (transcript) {
-    content = <Transcript transcript={transcript} file={savedFileInfo} cancel={cancelTranscript}/>
+    content = <Transcribed transcript={transcript} file={savedFileInfo} cancel={cancelTranscript}/>
   }
   else if (selectedFile && fileError(selectedFile) === undefined) {
     content =
@@ -78,7 +80,7 @@ function App() {
       />
   }
   else {
-    content = <ChooseFile onFile={onFile} fileError={fileError(selectedFile)}/>
+    content = <ChooseFile loadPurchase={loadPurchase} onFile={onFile} fileError={fileError(selectedFile)} purchases={purchases}/>
   }
 
   return (

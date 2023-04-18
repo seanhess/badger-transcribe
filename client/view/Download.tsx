@@ -1,18 +1,20 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import * as Style from "../comp/Style"
 import * as Icons from "../comp/Icons"
-import { FileInfo } from "../file";
+import { FileInfo } from "../data/file";
 import { Content, Sidebar } from "../comp/Layout"
-import FileRow from "../comp/FileRow"
+import { FileRow } from "../comp/FileRow"
 import { saveAs } from 'file-saver'
+import { Transcript } from "../data/TranscriptHistory"
 
 interface Props {
   transcript:string
   file:FileInfo
   startOver():void
+  purchased(trans:Transcript):void
 }
 
-export const Download:FC<Props> = ({transcript, file, startOver}) => {
+export const Download:FC<Props> = ({transcript, file, startOver, purchased}) => {
   // const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   function download() {
@@ -21,6 +23,7 @@ export const Download:FC<Props> = ({transcript, file, startOver}) => {
   }
 
   function remove() {
+    purchased({transcript:transcript, file:file})
     startOver()
   }
 
@@ -44,7 +47,7 @@ export const Download:FC<Props> = ({transcript, file, startOver}) => {
         </div>
         <div className="bg-gray-light p-10 border-dashed border-4 border-gray gap-4 flex flex-col relative">
           <button onClick={copyTranscript} className="cursor-pointer absolute right-2 top-2 text-gray-dark"><Icons.Copy/></button>
-          { paragraphs.map((p) => <p>{p}</p>) }
+          { paragraphs.map((p, i) => <p key={i}>{p}</p>) }
         </div>
       </Content>
     </>

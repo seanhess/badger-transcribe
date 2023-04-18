@@ -1,25 +1,40 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import * as Icons from "../comp/Icons"
-import { FileInfo, formatBytes } from "../file";
+import { FileInfo, formatBytes } from "../data/file";
 
 interface Props {
   file: FileInfo
-  onRemove():void
+  onRemove?():void
 }
 
 export const FileRow:FC<Props> = ({file, onRemove}) => {
+
+  let btn = <></>
+  if (onRemove) {
+    btn = <button onClick={onRemove}><Icons.XCircle/></button>
+  }
   return (
-    <>
-      <div className="flex flex-row-wrapped gap-2">
-        <button onClick={onRemove}>
-          <Icons.XCircle/>
-        </button>
-        <div className="grow">{file.name}</div>
-        <div>{formatBytes(file.size)}</div>
-      </div>
-    </>
+    <FileRowContainer>
+      {btn}
+      <FileInfoFields file={file}/>
+    </FileRowContainer>
   )
 }
 
-export default FileRow;
 
+export const FileRowContainer:FC<{children:ReactNode}> = ({children}) => {
+  return (
+    <div className="flex flex-row-wrapped gap-2">
+      {children}
+    </div>
+  )
+}
+
+export const FileInfoFields:FC<{file:FileInfo}> = ({file}) => {
+  return (
+    <>
+      <div className="grow text-left">{file.name}</div>
+      <div>{formatBytes(file.size)}</div>
+    </>
+  )
+}
