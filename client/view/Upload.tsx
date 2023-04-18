@@ -107,11 +107,13 @@ export const Transcribe:FC<TranscribeProps> = ({onTranscribe, onRemove, file}) =
 
   const [punctuate, setPunctuate] = useState<boolean>(true)
   const [numerals, setNumerals] = useState<boolean>(true)
+  const [speakers, setSpeakers] = useState<boolean>(true)
 
   function options():TranscribeOptions {
     return {
       punctuate: punctuate,
-      numerals: numerals
+      numerals: numerals,
+      speakers: speakers
     }
   }
 
@@ -126,6 +128,10 @@ export const Transcribe:FC<TranscribeProps> = ({onTranscribe, onRemove, file}) =
       <div className="flex flex-col">
         <Switch checked={numerals} onChange={setNumerals} label="Numerals"/>
         <div className="italic">Converts numbers from written format to numerical format</div>
+      </div>
+      <div className="flex flex-col">
+        <Switch checked={speakers} onChange={setSpeakers} label="Speakers"/>
+        <div className="italic">Label individual speakers</div>
       </div>
       <button className={Style.button + "justify-center"} onClick={() => onTranscribe(file, options())}>
         <span>Transcribe Audio</span>

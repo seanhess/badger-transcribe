@@ -1,7 +1,7 @@
 from bottle import route, post, get, run, redirect, template, static_file, request, FileUpload, default_app, HTTPResponse
 from tempfile import NamedTemporaryFile
 from typing import BinaryIO, TypedDict, Optional, Match, Union
-from app.transcribe import transcribe_upload, InvalidFiletype, Options
+from app.transcribe import transcribe_upload, InvalidFiletype, Features
 import shutil
 import os
 import stripe
@@ -31,14 +31,15 @@ def upload():
   if (size > 10*1000000):
     return HTTPResponse(status=413, body={"error": "FileTooLarge", "size": size})
 
-  options = Options()
-  options.punctuate = request.forms.get('punctuate')
-  options.numerals = request.forms.get('numerals')
+  features = Features()
+  features.punctuate = request.forms.get('punctuate')
+  features.numerals = request.forms.get('numerals')
+  features.speakers = request.forms.get('speakers')
   _, ext = os.path.splitext(upload.filename)
 
   try:
-    result = transcribe_upload(upload, options)
-    return {"transcript": result.get('transcript')}
+    result = transcribe_upload(upload, features)
+    return {"transcript": result.get('paragraphs').get('transcript')}
   except InvalidFiletype: 
     return HTTPResponse(status=400, body={"error": "InvalidFiletype", "ext": ext})
 

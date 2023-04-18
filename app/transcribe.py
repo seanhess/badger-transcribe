@@ -10,36 +10,46 @@ import os
 DEEPGRAM_API_KEY = os.getenv('DEEPGRAM_API_KEY')
 deepgram = Deepgram(DEEPGRAM_API_KEY)
 
-class Options():
+class Features():
   punctuate: bool
   numerals: bool
+  speakers: bool
 
 # https://developers.deepgram.com/documentation/features/
-def transcribe_upload(upload: FileUpload, options: Options) -> Alternative:
+def transcribe_upload(upload: FileUpload, features: Features) -> Alternative:
   audio = upload_source(upload)
-  response = deepgram.transcription.sync_prerecorded(audio,
-              { 'alternatives': 1, # only return 1 option. They can give more!
 
-                # These are valid options
-                'punctuate': str(options.punctuate),
-                'numerals': str(options.numerals),
-                'smart_format': "true",
+  options = {
+    'alternatives': 1, # only return 1 option. They can give more!
 
-                # can't tell if these are working
-                # these are word-level features.
-                'diarize': 'true',
-                'utterances': 'true',
 
-                # can't find timestamps
-              }
-            )
+    # Smart format appears to enable punctuate and numerals
+    # creates the "paragraphs" object in the return type
+    # otherwise all you have is one big transcript and a list of words
+    'smart_format': "true",
 
-  # print("SENT", "punctuate:", options.punctuate, "numerals:", options.numerals)
+    # These are valid options
+    'punctuate': features.punctuate,
+    'numerals': features.numerals,
+    'diarize': features.speakers,
+
+    # What is the point of utterances??
+    # 'utterances': 'true',
+
+    # Enhanced is working. Nova isn't enabled. Will throw error if tier doesn't exist
+    "model": 'general',
+    "tier": 'enhanced'
+  }
+
+
+  response = deepgram.transcription.sync_prerecorded(audio, options)
+
+  print("SENT", "punctuate:", options.get('punctuate'), "numerals:", options.get('numerals'), "diarize:", options.get('diarize'))
   # print(json.dumps(response, indent=4))
 
-  # f = open("output.json", "w")
-  # f.write(json.dumps(response, indent=4))
-  # f.close()
+  f = open("output.json", "w")
+  f.write(json.dumps(response, indent=4))
+  f.close()
 
   return response.get("results").get("channels")[0].get("alternatives")[0]
 

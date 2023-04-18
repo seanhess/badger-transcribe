@@ -4,6 +4,7 @@ import { fileSizeMb } from './file';
 export type TranscribeOptions = {
   punctuate: boolean
   numerals: boolean
+  speakers: boolean
 }
 
 export async function uploadAndTranscribe(file:File, options:TranscribeOptions, onProgress:(e:number) => void):Promise<Result> {
@@ -12,6 +13,7 @@ export async function uploadAndTranscribe(file:File, options:TranscribeOptions, 
   formData.append("upload", file)
   formData.append("punctuate", JSON.stringify(options.punctuate))
   formData.append("numerals", JSON.stringify(options.punctuate))
+  formData.append("speakers", JSON.stringify(options.speakers))
 
   // TODO handle serverside error (HTML return format)
   const res:AxiosResponse<Result> = await axios.postForm("/upload", formData,

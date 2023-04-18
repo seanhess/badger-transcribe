@@ -24,6 +24,9 @@ export const Download:FC<Props> = ({transcript, file, startOver}) => {
     startOver()
   }
 
+  // Split paragraphs
+  let paragraphs = transcript.trim().split(/\n+/g)
+
   return (
     <>
       <Content>
@@ -33,7 +36,7 @@ export const Download:FC<Props> = ({transcript, file, startOver}) => {
           <button className={Style.button} onClick={download}>Download Full Transcript</button>
         </div>
         <div className="bg-gray-light p-10 border-dashed border-4 border-gray gap-4 flex flex-col">
-          <p>{transcript}</p>
+          { paragraphs.map((p) => <p>{p}</p>) }
         </div>
       </Content>
     </>
